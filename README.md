@@ -2,7 +2,7 @@
 
 `fixposition_gnss_tf`
 
-This is a simple C++ library for geodetic coordinate transformations. This should also serve as an exmaple of how to calculate spatial coordinate transformations between the following coordinate frames:
+This is a simple C++ library for geodetic coordinate transformations. This should also serve as an example of how to calculate spatial coordinate transformations between the following coordinate frames:
 
 -  ECEF: Earth-Center-Earth-Fixed
 -  ENU: East-North-Up (Local tangiantial plane)

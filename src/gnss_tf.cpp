@@ -83,6 +83,26 @@ Eigen::Matrix3d RotEnuEcef(const Eigen::Vector3d &ecef) {
     return RotEnuEcef(wgs84llh.x(), wgs84llh.y());
 }
 
+Eigen::Matrix3d RotNedEnu() {
+    /**
+     * | 0, 1, 0 |
+     * | 1, 0, 0 |
+     * | 0, 0,-1 |
+     *
+     */
+
+    Eigen::Matrix3d rot_ned_enu;
+    rot_ned_enu << 0, 1, 0, 1, 0, 0, 0, 0, -1;
+    return rot_ned_enu;
+}
+
+Eigen::Matrix3d RotNedEcef(double lat, double lon) { return RotNedEnu() * RotEnuEcef(lat, lon); }
+
+Eigen::Matrix3d RotNedEcef(const Eigen::Vector3d &ecef) {
+    const Eigen::Vector3d wgs84llh = TfWgs84LlhEcef(ecef);
+    return RotNedEcef(wgs84llh.x(), wgs84llh.y());
+}
+
 Eigen::Vector3d TfEnuEcef(const Eigen::Vector3d &ecef, const Eigen::Vector3d &wgs84llh_ref) {
     const Eigen::Vector3d ecef_ref = TfEcefWgs84Llh(wgs84llh_ref);
     return RotEnuEcef(wgs84llh_ref.x(), wgs84llh_ref.y()) * (ecef - ecef_ref);
@@ -93,6 +113,15 @@ Eigen::Vector3d TfEcefEnu(const Eigen::Vector3d &enu, const Eigen::Vector3d &wgs
     return ecef_ref + RotEnuEcef(wgs84llh_ref.x(), wgs84llh_ref.y()).transpose() * enu;
 }
 
+Eigen::Vector3d TfNedEcef(const Eigen::Vector3d &ecef, const Eigen::Vector3d &wgs84llh_ref) {
+    const Eigen::Vector3d ecef_ref = TfEcefWgs84Llh(wgs84llh_ref);
+    return RotNedEcef(wgs84llh_ref.x(), wgs84llh_ref.y()) * (ecef - ecef_ref);
+}
+
+Eigen::Vector3d TfEcefNed(const Eigen::Vector3d &ned, const Eigen::Vector3d &wgs84llh_ref) {
+    const Eigen::Vector3d ecef_ref = TfEcefWgs84Llh(wgs84llh_ref);
+    return ecef_ref + RotNedEcef(wgs84llh_ref.x(), wgs84llh_ref.y()).transpose() * ned;
+}
 /**
  * @details Implementation based on paper
  * https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#The_application_of_Ferrari's_solution
@@ -152,6 +181,15 @@ Eigen::Vector3d TfEcefWgs84Llh(const Eigen::Vector3d &wgs84llh) {
     ecef.z() = (n * (1 - Constants::wgs84_e_2) + height) * s_lat;
 
     return ecef;
+}
+
+Eigen::Vector3d EcefPoseToEnuEul(const Eigen::Vector3d &ecef_p, const Eigen::Matrix3d &ecef_r) {
+    //! Rotation Matrix to convert to ENU frame
+    const Eigen::Matrix3d rot_enu_ecef = RotEnuEcef(ecef_p);
+    //! Convert the Pose into ENU frame
+    const Eigen::Matrix3d rot_enu_body = rot_enu_ecef * ecef_r;
+    //! Convert Rotation Matrix into Yaw-Pitch-Roll
+    return RotToEul(rot_enu_body);
 }
 
 }  // namespace gnss_tf

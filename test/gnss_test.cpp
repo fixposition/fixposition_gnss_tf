@@ -1,15 +1,15 @@
 /**
  *  ___    ___
  *  \  \  /  /
- *   \  \/  /  
- *   /  /\  \  
+ *   \  \/  /
+ *   /  /\  \
  *  /__/  \__\  Fixposition AG
- * 
+ *
  * @file gnss_test.cpp
  * @author Fixpositon AG (info@fixposition.com)
  * @brief 2021 Fixposition AG www.fixposition.com All rights reserved.
  * @date 2021-07-20
- * 
+ *
  */
 
 /* SYSTEM / STL */
@@ -17,6 +17,7 @@
 
 /* EXTERNAL */
 #include <yaml-cpp/yaml.h>
+
 #include <eigen3/Eigen/Core>
 
 /* PACKAGE */
@@ -27,7 +28,8 @@ namespace {
 
 static const double ecef_err = 5e-4;
 static const double rad_err = 1e-8;
-static const std::string test_config_path = TEST_DIR + std::string("gnss_test.yaml");
+static const std::string gnss_test_config_path = TEST_DIR + std::string("gnss_test.yaml");
+static const std::string geometry_test_config_path = TEST_DIR + std::string("geometry_test.yaml");
 
 /**
  * @brief Convert degrees to radians
@@ -61,7 +63,7 @@ constexpr inline T RadToDeg(T radians) {
  * @param[in] llh_deg llh in degrees
  * @return Eigen::Vector3d llh in radian
  */
-inline Eigen::Vector3d LlhDegToRad(const Eigen::Vector3d& llh_deg) {
+inline Eigen::Vector3d LlhDegToRad(const Eigen::Vector3d &llh_deg) {
     return Eigen::Vector3d(DegToRad(llh_deg.x()), DegToRad(llh_deg.y()), llh_deg.z());
 }
 
@@ -71,18 +73,18 @@ inline Eigen::Vector3d LlhDegToRad(const Eigen::Vector3d& llh_deg) {
  * @param[in] llh_rad llh in radian
  * @return Eigen::Vector3d llh in degrees
  */
-inline Eigen::Vector3d LlhRadToDeg(const Eigen::Vector3d& llh_rad) {
+inline Eigen::Vector3d LlhRadToDeg(const Eigen::Vector3d &llh_rad) {
     return Eigen::Vector3d(RadToDeg(llh_rad.x()), RadToDeg(llh_rad.y()), llh_rad.z());
 }
 
-void CompareEigenVec(const Eigen::VectorXd& vec1, const Eigen::VectorXd& vec2, const double err = ecef_err) {
+void CompareEigenVec(const Eigen::VectorXd &vec1, const Eigen::VectorXd &vec2, const double err = ecef_err) {
     EXPECT_EQ(vec1.size(), vec2.size());
     for (int i = 0; i < vec1.size(); ++i) {
         EXPECT_NEAR(vec1[i], vec2[i], err);
     }
 }
 
-void CompareLlh(const Eigen::Vector3d& vec1, const Eigen::Vector3d& vec2) {
+void CompareLlh(const Eigen::Vector3d &vec1, const Eigen::Vector3d &vec2) {
     EXPECT_EQ(vec1.size(), vec2.size());
     EXPECT_NEAR(vec1.x(), vec2.x(), rad_err);
     EXPECT_NEAR(vec1.y(), vec2.y(), rad_err);
@@ -96,7 +98,7 @@ class LlhEcefTest : public ::testing::Test {
     std::vector<Eigen::Vector3d> ecef_vec_;
 
     virtual void SetUp() final {
-        YAML::Node LLH_ECEF = YAML::LoadFile(test_config_path)["LLH_ECEF"];
+        YAML::Node LLH_ECEF = YAML::LoadFile(gnss_test_config_path)["LLH_ECEF"];
         for (auto elem : LLH_ECEF) {
             Eigen::Vector3d llh(elem["LLH"].as<std::vector<double>>().data());
             Eigen::Vector3d ecef(elem["ECEF"].as<std::vector<double>>().data());
@@ -130,7 +132,7 @@ class EnuEcefTest : public ::testing::Test {
     std::vector<Eigen::Vector3d> ecef_vec_;
 
     virtual void SetUp() final {
-        YAML::Node ENU_ECEF = YAML::LoadFile(test_config_path)["ENU_ECEF"];
+        YAML::Node ENU_ECEF = YAML::LoadFile(gnss_test_config_path)["ENU_ECEF"];
         for (auto elem : ENU_ECEF) {
             Eigen::Vector3d llh(elem["LLH"].as<std::vector<double>>().data());
             Eigen::Vector3d enu(elem["ENU"].as<std::vector<double>>().data());
@@ -170,9 +172,94 @@ TEST_F(EnuEcefTest, TfEcefEnu) {
     }
 }
 
+class NedEcefTest : public ::testing::Test {
+   public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    std::vector<Eigen::Vector3d> llh_vec_;
+    std::vector<Eigen::Vector3d> ned_vec_;
+    std::vector<Eigen::Vector3d> ecef_vec_;
+
+    virtual void SetUp() override {
+        YAML::Node NED_ECEF = YAML::LoadFile(gnss_test_config_path)["NED_ECEF"];
+        for (auto elem : NED_ECEF) {
+            Eigen::Vector3d llh(elem["LLH"].as<std::vector<double>>().data());
+            Eigen::Vector3d ned(elem["NED"].as<std::vector<double>>().data());
+            Eigen::Vector3d ecef(elem["ECEF"].as<std::vector<double>>().data());
+            llh_vec_.push_back(llh);
+            ned_vec_.push_back(ned);
+            ecef_vec_.push_back(ecef);
+        }
+    }
+};
+
+TEST_F(NedEcefTest, TestNedEcef) {
+    const size_t num_tests = llh_vec_.size();
+    for (size_t i = 0; i < num_tests; ++i) {
+        const Eigen::Vector3d llh = LlhDegToRad(llh_vec_.at(i));
+        const Eigen::Vector3d ned = ned_vec_.at(i);
+        const Eigen::Vector3d ecef = ecef_vec_.at(i);
+
+        const Eigen::Vector3d resned = gnss_tf::TfNedEcef(ecef, llh);
+
+        std::cout << "Res NED  " << LlhRadToDeg(resned).transpose().format(Eigen::IOFormat(15)) << std::endl;
+        CompareEigenVec(ned, resned);
+    }
+}
+
+TEST_F(NedEcefTest, TfEcefNed) {
+    const size_t num_tests = llh_vec_.size();
+    for (size_t i = 0; i < num_tests; ++i) {
+        const Eigen::Vector3d llh = LlhDegToRad(llh_vec_.at(i));
+        const Eigen::Vector3d ned = ned_vec_.at(i);
+        const Eigen::Vector3d ecef = ecef_vec_.at(i);
+
+        const Eigen::Vector3d resecef = gnss_tf::TfEcefNed(ned, llh);
+
+        std::cout << "Res ECEF  " << resecef.transpose().format(Eigen::IOFormat(15)) << std::endl;
+        CompareEigenVec(ecef, resecef);
+    }
+}
+
+class RotationConversionTest : public ::testing::Test {
+   public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    std::vector<Eigen::Matrix<double, 3, 3, Eigen::RowMajor>> rotmat_vec_;
+    std::vector<Eigen::Vector4d> q_vec_;
+    std::vector<Eigen::Vector3d> eul_vec_;
+    std::vector<Eigen::Vector3d> eul_deg_vec_;
+
+    virtual void SetUp() override {
+        YAML::Node ROTATIONS = YAML::LoadFile(gnss_test_config_path)["ROTATIONS"];
+        for (auto elem : ROTATIONS) {
+            Eigen::Matrix<double, 3, 3, Eigen::RowMajor> rotmat(elem["ROTMAT"].as<std::vector<double>>().data());
+            Eigen::Vector4d q(elem["Q"].as<std::vector<double>>().data());
+            Eigen::Vector3d eul(elem["EUL"].as<std::vector<double>>().data());
+            rotmat_vec_.push_back(rotmat);
+            q_vec_.push_back(q);
+            eul_vec_.push_back(eul);
+        }
+    }
+};
+
+TEST_F(RotationConversionTest, TestQuatEul) {
+    const size_t num_tests = rotmat_vec_.size();
+    for (size_t i = 0; i < num_tests; ++i) {
+        const Eigen::Vector4d q = q_vec_.at(i);
+        const Eigen::Quaterniond quat(q(0), q(1), q(2), q(3));
+        const Eigen::Vector3d eul = eul_vec_.at(i);
+
+        const Eigen::Vector3d eul_test = gnss_tf::QuatToEul(quat);
+
+        std::cout << "Eul " << eul.transpose() << " Eul_Test " << eul_test.transpose() << "\n";
+
+        // compare quat, might be 1 0 0 0 or -1 0 0 0
+        EXPECT_LE((eul_test - eul).norm(), 1e-5);
+    }
+}
+
 }  // anonymous namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

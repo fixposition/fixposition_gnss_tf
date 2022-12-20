@@ -13,10 +13,24 @@ This is a simple C++ library for geodetic coordinate transformations. This shoul
 -  [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page), tested with version [3.3.7](https://gitlab.com/libeigen/eigen/-/releases/3.3.7)
 -  [CMake](https://cmake.org/)
 -  [Catkin](http://wiki.ros.org/catkin)
+-  [Yaml-Cpp](https://yaml-cpp.docsforge.com/)
 
 For the tests:
 
 -  [Googletest](https://github.com/google/googletest)
+
+## Installing dependencies on Ubuntu system
+
+```
+ sudo apt update
+ sudo apt install -y wget
+ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+ sudo apt-get update
+ sudo apt-get install -y python3-catkin-tools
+ sudo apt install -y build-essential cmake
+ sudo apt install -y libeigen3-dev
+ sudo apt install -y libyaml-cpp-dev
+```
 
 ## Build
 

@@ -9,33 +9,30 @@ add_definitions(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 
 # DEPENDENCIES =========================================================================================================
 find_package(Eigen3 REQUIRED)
-find_package(catkin REQUIRED)
+find_package(ament_cmake REQUIRED)
 
-# define catkin package for this project
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS
-)
-
-include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
+include_directories(include ${EIGEN3_INCLUDE_DIR})
 
 # BUILD SHARED LIBRARY =================================================================================================
 add_library(${PROJECT_NAME} SHARED
   src/gnss_tf.cpp
 )
 
-target_include_directories(${PROJECT_NAME} INTERFACE ${catkin_LIBRARIES})
 # link library against dependencies
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}  ${EIGEN3_LIBRARIES})
+
+ament_export_dependencies()
+# define ament package for this project
+ament_package()
 
 # TEST =================================================================================================================
-if (CATKIN_ENABLE_TESTING)
+if (BUILD_TESTING)
   find_package(yaml-cpp  REQUIRED)
+  find_package(ament_cmake_gtest REQUIRED)
 
-  catkin_add_gtest(gnss_test test/gnss_test.cpp)
+  ament_add_gtest(gnss_test test/gnss_test.cpp)
   target_compile_definitions(gnss_test PRIVATE TEST_DIR="${CMAKE_CURRENT_LIST_DIR}/test/")
-  target_link_libraries(gnss_test ${PROJECT_NAME} ${catkin_LIBRARIES} yaml-cpp)
+  target_link_libraries(gnss_test ${PROJECT_NAME}  yaml-cpp)
 
   include(GoogleTest)
   gtest_discover_tests(gnss_test)

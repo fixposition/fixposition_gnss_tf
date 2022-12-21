@@ -26,7 +26,6 @@ For the tests:
  sudo apt install -y wget
  wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
  sudo apt-get update
- sudo apt-get install -y python3-catkin-tools
  sudo apt install -y build-essential cmake
  sudo apt install -y libeigen3-dev
  sudo apt install -y libyaml-cpp-dev
@@ -34,21 +33,25 @@ For the tests:
 
 ## Build
 
-### Using [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/) (_recommended_):
-
--  Create a catkin workspace with the structure:
+### Using colcon: (Recommended)
+-  Create a ament workspace with the structure:
 
 ```
-catkin_ws
+ament_ws
 └── src
     └── gnsstransformationlib
-    └── <Other Catkin Pacakges>
+    └── <Other Pacakges>
 ```
 
 -  in the workspace do:
 
 ```bash
-catkin build fixposition_gnss_tf
+colcon build --packages-select fixposition_gnss_tf
+```
+- and to build and run unit tests
+
+```bash
+colcon test --packages-select fixposition_gnss_tf
 ```
 
 ### Using CMake:

@@ -21,8 +21,18 @@ add_library(${PROJECT_NAME} SHARED
 # link library against dependencies
 target_link_libraries(${PROJECT_NAME}  ${EIGEN3_LIBRARIES})
 
-ament_export_dependencies()
 # define ament package for this project
+install(
+	DIRECTORY include
+	DESTINATION .
+)
+install(TARGETS ${PROJECT_NAME}
+	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
+	RUNTIME DESTINATION bin
+ )
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
 ament_package()
 
 # TEST =================================================================================================================

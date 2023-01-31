@@ -28,8 +28,8 @@ namespace {
 
 static const double ecef_err = 5e-4;
 static const double rad_err = 1e-8;
-static const std::string gnss_test_config_path = TEST_DIR + std::string("gnss_test.yaml");
-static const std::string geometry_test_config_path = TEST_DIR + std::string("geometry_test.yaml");
+static const std::string gnss_test_config_path = std::string("gnss_test.yaml");
+static const std::string geometry_test_config_path = std::string("geometry_test.yaml");
 
 /**
  * @brief Convert degrees to radians

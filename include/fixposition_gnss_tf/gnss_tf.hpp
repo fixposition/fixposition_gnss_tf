@@ -85,7 +85,6 @@ Eigen::Vector3d TfEnuEcef(const Eigen::Vector3d &ecef, const Eigen::Vector3d &wg
  */
 Eigen::Vector3d TfEcefEnu(const Eigen::Vector3d &enu, const Eigen::Vector3d &wgs84llh_ref);
 
-
 Eigen::Vector3d TfNedEcef(const Eigen::Vector3d &ecef, const Eigen::Vector3d &wgs84llh_ref);
 Eigen::Vector3d TfEcefNed(const Eigen::Vector3d &ned, const Eigen::Vector3d &wgs84llh_ref);
 

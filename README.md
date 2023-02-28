@@ -34,6 +34,15 @@ Build system:
  sudo apt install -y libyaml-cpp-dev
 ```
 
+if you also want to run the unit-tests:
+```
+ sudo apt-get install libgtest-dev
+ cd /usr/src/gtest
+ sudo cmake .
+ sudo make
+ sudo make install
+ ```
+
 ## Build
 
 ### Using catkin (ROS1):
@@ -54,6 +63,7 @@ catkin build fixposition_gnss_tf
 - and to build and run unit tests
 
 ```bash
+catkin build fixposition_gnss_tf -DBUILD_TESTING=ON
 catkin run_tests fixposition_gnss_tf
 ```
 
@@ -75,20 +85,28 @@ colcon build --packages-select fixposition_gnss_tf
 - and to build and run unit tests
 
 ```bash
+# build with testing enabled
+colcon build --packages-select fixposition_gnss_tf --cmake-args -DBUILD_TESTING=ON
+# run the tests
 colcon test --packages-select fixposition_gnss_tf
+# check the results
+colcon test-result --test-result-base build/fixposition_gnss_tf/
 ```
 
 ### Using CMake:
-- build
+- setup build directory
 ```bash
 mkdir build
 cd build
+```
+- build without unit tests
+```
 cmake ..
 make
 ```
-
-- run tests
+- build and run unit tests
 ```bash
+cmake .. -DBUILD_TESTING=ON
 make test
 ```
 

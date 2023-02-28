@@ -56,12 +56,10 @@ macro(add_gtest)
         target_include_directories(${GTEST_PREFIX}_${ADD_GTEST_TARGET}
             PRIVATE ${ADD_GTEST_INCLUDE_DIRS}
         )
-        target_link_directories(${GTEST_PREFIX}_${ADD_GTEST_TARGET}
-            PRIVATE ${ADD_GTEST_LINK_DIRS}
-        )
         target_link_libraries(${GTEST_PREFIX}_${ADD_GTEST_TARGET}
             PRIVATE
-            GTest::gtest_main
+            ${GTEST_BOTH_LIBRARIES}
+            ${CMAKE_THREAD_LIBS_INIT}
             ${ADD_GTEST_LINK_LIBS}
         )
 

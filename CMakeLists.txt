@@ -68,12 +68,14 @@ install(FILES
 export(EXPORT ${PROJECT_NAME}-targets FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-targets.cmake)
 
 # TEST =================================================================================================================
-include(${PROJECT_SOURCE_DIR}/cmake/testing.cmake)
-find_package(yaml-cpp REQUIRED)
+if(BUILD_TESTING)
+  include(${PROJECT_SOURCE_DIR}/cmake/testing.cmake)
+  find_package(yaml-cpp REQUIRED)
 
-add_gtest(
-  TARGET gnss_test
-  SOURCES test/gnss_test.cpp
-  LINK_LIBS ${PROJECT_NAME} yaml-cpp
-  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/test
-)
+  add_gtest(
+    TARGET gnss_test
+    SOURCES test/gnss_test.cpp
+    LINK_LIBS ${PROJECT_NAME} yaml-cpp
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/test
+  )
+endif()

@@ -1,5 +1,10 @@
 # Fixposition GNSS Transformation Lib
 
+- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_1804.yml/badge.svg)
+- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_2004.yml/badge.svg)
+- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_2204.yml/badge.svg)
+
+
 `fixposition_gnss_tf`
 
 This is a simple C++ library for geodetic coordinate transformations. This should also serve as an example of how to calculate spatial coordinate transformations between the following coordinate frames:

@@ -1,0 +1,36 @@
+name: Build and Test on Ubuntu 18.04
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        cmake-version: [3.12]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev
+    - name: Install Gtest
+      run: |
+        cd /usr/src/gtest
+        sudo cmake .
+        sudo make
+        sudo make install
+        
+    - name: Build and test
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DBUILD_TESTING=ON
+        make
+        make test

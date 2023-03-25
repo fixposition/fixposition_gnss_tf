@@ -2,6 +2,7 @@ name: Build and Test on Ubuntu 18.04
 
 on:
   push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 

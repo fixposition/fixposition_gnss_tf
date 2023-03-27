@@ -1,8 +1,8 @@
 # Fixposition GNSS Transformation Lib
 
-- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_1804.yml/badge.svg)
-- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_2004.yml/badge.svg)
-- ![](https://github.com/khuang93/fixposition_gnss_tf/actions/workflows/build_test_2204.yml/badge.svg)
+- [![](./../../actions/workflows/build_test_1804.yml/badge.svg)](./../../actions/workflows/build_test_1804.yml)
+- [![](./../../actions/workflows/build_test_2004.yml/badge.svg)](./../../actions/workflows/build_test_2004.yml)
+- [![](./../../actions/workflows/build_test_2204.yml/badge.svg)](./../../actions/workflows/build_test_2004.yml)
 
 
 `fixposition_gnss_tf`

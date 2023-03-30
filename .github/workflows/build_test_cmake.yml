@@ -17,10 +17,6 @@ jobs:
       matrix:
         config:
         - {
-            name: "Ubuntu 18.04",
-            os: ubuntu-18.04,
-          }
-        - {
             name: "Ubuntu 20.04",
             os: ubuntu-20.04,
           }
@@ -35,14 +31,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev
-    - name: Install Gtest
-      if: matrix.config.os == 'ubuntu-18.04'
-      run: |
-        cd /usr/src/gtest
-        sudo cmake .
-        sudo make
-        sudo make install
-        
     - name: Build and test
       run: |
         mkdir build

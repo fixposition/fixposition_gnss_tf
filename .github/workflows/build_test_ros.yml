@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - name: "melodic"
-          #   container:
-          #     image: "ros:melodic"
-          #     env:
-          #       ROS_DISTRO: melodic
+          - name: "melodic"
+            container:
+              image: "ros:melodic"
+              env:
+                ROS_DISTRO: melodic
           - name: "noetic"
             container:
               image: "ros:noetic"

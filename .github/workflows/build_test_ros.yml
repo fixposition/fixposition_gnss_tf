@@ -39,7 +39,7 @@ jobs:
       - name: Set up Deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev python3-osrf-pycommonpython3-catkin-tools
+          sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev python3-osrf-pycommon python3-catkin-tools
       - name: Build and test
         run: |
           catkin init

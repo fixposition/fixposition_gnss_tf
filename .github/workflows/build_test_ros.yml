@@ -11,7 +11,7 @@ jobs:
 
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
-
+    
     strategy:
       fail-fast: false
       matrix:
@@ -23,6 +23,7 @@ jobs:
             env:
               ROS_DISTRO: noetic
 
+    container: ${{ matrix.container }}
     steps:
     - uses: actions/checkout@v3
       with:

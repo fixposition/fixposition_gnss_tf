@@ -2,45 +2,47 @@ name: Build and Test with ROS1
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
-    
+
     strategy:
       fail-fast: false
       matrix:
         config:
-          - image: 'ros:melodic-desktop-full'
-            name: "melodic"
-            env:
-              ROS_DISTRO: melodic
-          - image: 'ros:noetic-desktop-full'
-            name: "noetic"
-            env:
-              ROS_DISTRO: noetic
+          - name: "melodic"
+            container:
+              image: "ros:melodic-desktop-full"
+              env:
+                ROS_DISTRO: melodic
+          - name: "melodic"
+            container:
+              image: "ros:noetic-desktop-full"
+              name: "noetic"
+              env:
+                ROS_DISTRO: noetic
 
-    container: ${{ matrix.config }}
+    container: ${{ matrix.config.container }}
 
     defaults:
       run:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        path: src/fixposition_gnss_tf
-    - name: Set up Deps
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev python3-osrf-pycommonpython3-catkin-tools
-    - name: Build and test
-      run: |
-        catkin init
-        catkin build --force-cmake -DBUILD_TESTING=ON
-        catkin run_tests
+      - uses: actions/checkout@v3
+        with:
+          path: src/fixposition_gnss_tf
+      - name: Set up Deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev python3-osrf-pycommonpython3-catkin-tools
+      - name: Build and test
+        run: |
+          catkin init
+          catkin build --force-cmake -DBUILD_TESTING=ON
+          catkin run_tests

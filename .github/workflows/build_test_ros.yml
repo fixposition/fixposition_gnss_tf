@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - name: "melodic"
-            container:
-              image: "ros:melodic"
-              env:
-                ROS_DISTRO: melodic
+          # - name: "melodic"
+          #   container:
+          #     image: "ros:melodic"
+          #     env:
+          #       ROS_DISTRO: melodic
           - name: "noetic"
             container:
               image: "ros:noetic"
@@ -45,6 +45,8 @@ jobs:
           catkin init
       - name: Build and Test
         run: |
+          pwd
+          source /opt/ros/$ROS_DISTRO/setup.bash
           source devel/setup.bash 
           catkin build --force-cmake -DBUILD_TESTING=ON
           catkin run_tests          

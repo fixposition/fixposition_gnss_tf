@@ -1,6 +1,6 @@
 # Fixposition GNSS Transformation Lib
 
--   [Ubuntu 18.04 / 20.04 / 22.04 ![](./../../actions/workflows/build_test_cmake.yml/badge.svg)](./../../actions/workflows/build_test_cmake.yml)
+-   [Ubuntu 20.04 / 22.04 ![](./../../actions/workflows/build_test_cmake.yml/badge.svg)](./../../actions/workflows/build_test_cmake.yml)
 -   [ROS1 melodic / noetic ![](./../../actions/workflows/build_test_ros.yml/badge.svg)](./../../actions/workflows/build_test_ros.yml)
 
 `fixposition_gnss_tf`

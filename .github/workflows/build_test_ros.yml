@@ -17,9 +17,11 @@ jobs:
       matrix:
         config:
           - image: 'ros:melodic-desktop-full'
+            name: "melodic"
             env:
               ROS_DISTRO: melodic
           - image: 'ros:noetic-desktop-full'
+            name: "noetic"
             env:
               ROS_DISTRO: noetic
 

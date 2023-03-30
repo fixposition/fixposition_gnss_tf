@@ -25,7 +25,12 @@ jobs:
             env:
               ROS_DISTRO: noetic
 
-    container: ${{ matrix.container }}
+    container: ${{ matrix.config }}
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
     - uses: actions/checkout@v3
       with:

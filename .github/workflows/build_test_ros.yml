@@ -40,6 +40,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libeigen3-dev libyaml-cpp-dev libgtest-dev python3-osrf-pycommon python3-catkin-tools
+      - name: Install Gtest
+        if: matrix.config.container.image == 'ros:melodic'
+        run: |
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo make install
       - name: Init Workspace
         run: |
           catkin init

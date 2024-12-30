@@ -1,14 +1,30 @@
 # Fixposition GNSS Transformation Lib
 
+---
+
 <br/>
 <br/>
 <br/>
 <br/>
+
 **This project is no longer maintained.**
+
 <br/>
+
 The transformation functions are now available in the Fixposition SDK.
+
 <br/>
+
 See [fpsdk_common/trafo.hpp](https://github.com/fixposition/fixposition-sdk/blob/main/fpsdk_common/include/fpsdk_common/trafo.hpp)
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 <br/>
 <br/>
 <br/>

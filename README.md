@@ -1,5 +1,22 @@
 # Fixposition GNSS Transformation Lib
 
+<br/>
+<br/>
+<br/>
+<br/>
+**This project is no longer maintained.**
+<br/>
+The transformation functions are now available in the Fixposition SDK.
+<br/>
+See [fpsdk_common/trafo.hpp](https://github.com/fixposition/fixposition-sdk/blob/main/fpsdk_common/include/fpsdk_common/trafo.hpp)
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
 -   [Ubuntu 20.04 / 22.04 ![](./../../actions/workflows/build_test_cmake.yml/badge.svg)](./../../actions/workflows/build_test_cmake.yml)
 -   [ROS1 melodic / noetic ![](./../../actions/workflows/build_test_ros.yml/badge.svg)](./../../actions/workflows/build_test_ros.yml)
 -   [ROS2 foxy / humble ![](./../../actions/workflows/build_test_ros2.yml/badge.svg)](./../../actions/workflows/build_test_ros2.yml)
